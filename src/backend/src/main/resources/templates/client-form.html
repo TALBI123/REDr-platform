@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouveau client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 720px;
+            margin: 40px auto;
+            padding: 0 16px;
+            background: #f7f8fc;
+        }
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        label {
+            display: block;
+            margin-top: 14px;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            margin-top: 6px;
+            border: 1px solid #d5d9e2;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .error {
+            color: #c62828;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 8px;
+            background: #1f6feb;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        a {
+            display: inline-block;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Créer un client</h1>
+
+    <form th:action="@{/clients}" th:object="${client}" method="post">
+        <label for="nom">Nom</label>
+        <input id="nom" type="text" th:field="*{nom}" placeholder="Nom">
+        <div class="error" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+
+        <label for="prenom">Prénom</label>
+        <input id="prenom" type="text" th:field="*{prenom}" placeholder="Prénom">
+        <div class="error" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></div>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" th:field="*{email}" placeholder="Email">
+        <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <label for="telephone">Téléphone</label>
+        <input id="telephone" type="text" th:field="*{telephone}" placeholder="Téléphone">
+        <div class="error" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></div>
+
+        <button type="submit">Enregistrer</button>
+    </form>
+
+    <a th:href="@{/}">Retour</a>
+</div>
+</body>
+</html>
