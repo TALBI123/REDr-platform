@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "gradle build",
+			"command": "./gradlew",
+			"args": [
+				"build"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/src/backend"
+			},
+			"group": "build",
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "silent"
+			}
+		}
+	]
+}
