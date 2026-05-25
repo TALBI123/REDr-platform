@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #123;
+        }
+        #inputField {
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        #submitButton {
+            padding: 10px 20px;
+        }
+        #container {
+            margin-top: 20px;
+            color:aliceblue
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="inputField" placeholder="Type something...">
+    <button id="submitButton">Submit</button>
+    <div id="container"></div>
+    <script>
+        const inputField = document.getElementById('inputField');
+        const submitButton = document.getElementById('submitButton');
+        const container = document.getElementById('container');
+
+        submitButton.addEventListener('click', () => {
+            const inputValue = inputField.value;
+            if (inputValue) {
+                // container.innerHTML = `You entered: ${inputValue}`;
+                container.innerHTML = inputValue;
+            }
+        });
+    </script>
+</body>
+</html>
