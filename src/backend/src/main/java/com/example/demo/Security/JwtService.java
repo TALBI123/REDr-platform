@@ -32,7 +32,6 @@ public class JwtService {
                                        .map(GrantedAuthority::getAuthority)
                                        .toList()
                 )
-                .claim("type", "access")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000))
                 .signWith(key)
@@ -52,14 +51,6 @@ public class JwtService {
                 .getPayload()
                 .getExpiration()
                 .before(new Date());
-    }
-
-    public boolean isAccessToken(String token) {
-        String type = parseToken(token)
-            .getPayload()
-            .get("type", String.class);
-
-        return "access".equals(type);
     }
 
     public Jws<Claims> parseToken(String token) {
