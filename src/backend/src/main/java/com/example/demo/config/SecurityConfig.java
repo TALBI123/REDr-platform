@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -21,7 +22,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         System.out.println("I'm in the SecurityConfig modifie");
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf .csrfTokenRepository(
+                CookieCsrfTokenRepository.withHttpOnlyFalse()
+            ))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             //.formLogin(form -> form.permitAll())
