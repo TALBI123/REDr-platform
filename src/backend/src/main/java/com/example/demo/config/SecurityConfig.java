@@ -22,13 +22,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         System.out.println("I'm in the SecurityConfig modifie");
         http
-            .csrf(csrf -> csrf .csrfTokenRepository(
-                CookieCsrfTokenRepository.withHttpOnlyFalse()
-            ))
+            .csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .ignoringRequestMatchers("/auth/login", "/h2-console/**")
+            )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             //.formLogin(form -> form.permitAll())
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**", "/h2-console/**").permitAll())
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**", "/csrf", "/h2-console/**").permitAll())
             .authorizeHttpRequests(auth -> auth
                 // .anyRequest().permitAll()
                 .anyRequest().authenticated()
@@ -36,7 +37,7 @@ public class SecurityConfig {
             .addFilterBefore(
                 jwtFilter,
                 UsernamePasswordAuthenticationFilter.class
-            );;
+            );
 
         return http.build();
     }
