@@ -1,5 +1,6 @@
 package com.example.demo.Security;
 
+import java.time.Duration;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -33,7 +34,7 @@ public class JwtService {
                                        .toList()
                 )
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000))
+                .expiration(new Date(System.currentTimeMillis() + Duration.ofDays(30).toMillis()))
                 .signWith(key)
                 .compact();
     }
