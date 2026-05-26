@@ -22,9 +22,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         System.out.println("I'm in the SecurityConfig modifie");
         http
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/auth/login", "/h2-console/**")
+            .csrf(csrf -> csrf.disable()
+                // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                // .ignoringRequestMatchers("/auth/login", "/h2-console/**")
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
