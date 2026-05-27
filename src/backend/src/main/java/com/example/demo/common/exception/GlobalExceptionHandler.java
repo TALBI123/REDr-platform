@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,6 +29,18 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining("; "));
 
         return buildError(HttpStatus.BAD_REQUEST, message, request.getRequestURI());
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiError> handleDisabled(
+            DisabledException ex,
+            HttpServletRequest request
+    ) {
+        return buildError(
+            HttpStatus.UNAUTHORIZED,
+            "Please verify your email before logging in",
+            request.getRequestURI()
+        );
     }
 
     @ExceptionHandler(AuthenticationException.class)
