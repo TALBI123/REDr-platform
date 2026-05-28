@@ -1,5 +1,6 @@
 package com.example.demo.agency.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,4 +12,5 @@ import com.example.demo.agency.entity.AgencyStatus;
 public interface AgencyRepository extends JpaRepository<Agency, UUID> {
     Optional<Agency> findByIdAndStatus(UUID id, AgencyStatus status);
     Optional<Agency> findByName(String name);
+    List<Agency> findByStatus(AgencyStatus status);
 }
