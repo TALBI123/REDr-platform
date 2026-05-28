@@ -1,4 +1,4 @@
-package com.example.demo.admin.controller;
+package com.example.demo.user.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

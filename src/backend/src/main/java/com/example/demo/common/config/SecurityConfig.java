@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -37,16 +38,18 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/h2-console/**").permitAll()
-
+                    .requestMatchers("/auth/**", "/h2-console/**", "/verification/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/agencies/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
+                    .requestMatchers(HttpMethod.PUT, "/agencies/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
+                    .requestMatchers(HttpMethod.PATCH, "/agencies/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
+                    .requestMatchers(HttpMethod.DELETE, "/agencies/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
                     .requestMatchers("/agencies/*/vehicles/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
                     .requestMatchers("/agencies/*/bookings/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
                     .requestMatchers("/bookings/my/**").hasAnyRole("CLIENT", "ADMIN")
-                    .requestMatchers(org.springframework.http.HttpMethod.GET, "/agencies/**").authenticated()
-                    .requestMatchers(org.springframework.http.HttpMethod.GET, "/vehicles/**").authenticated()
-
-                        .anyRequest().authenticated())
+                    .requestMatchers(HttpMethod.GET, "/agencies/**").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/vehicles/**").authenticated()
+                    .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
