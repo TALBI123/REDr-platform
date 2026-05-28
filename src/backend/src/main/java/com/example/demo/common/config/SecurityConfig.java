@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -36,6 +38,14 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**").permitAll()
+
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/agencies/*/vehicles/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
+                    .requestMatchers("/agencies/*/bookings/**").hasAnyRole("ADMIN", "AGENCY_MANAGER")
+                    .requestMatchers("/bookings/my/**").hasAnyRole("CLIENT", "ADMIN")
+                    .requestMatchers(org.springframework.http.HttpMethod.GET, "/agencies/**").authenticated()
+                    .requestMatchers(org.springframework.http.HttpMethod.GET, "/vehicles/**").authenticated()
+
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
