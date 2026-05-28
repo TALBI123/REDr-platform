@@ -43,6 +43,7 @@ public class RegistrationService {
         client.setPasswordUpdatedAt(LocalDateTime.now());
 
         Client savedClient = userRepository.save(client);
+        userRepository.flush(); // force commit before email verification
         emailVerificationService.sendVerificationEmail(savedClient.getEmail());
 
         return savedClient;
