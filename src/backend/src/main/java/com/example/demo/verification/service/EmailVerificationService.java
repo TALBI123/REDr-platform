@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.common.exception.ResourceNotFoundException;
 import com.example.demo.user.entity.AppUser;
 import com.example.demo.user.enums.UserStatus;
+import com.example.demo.user.enums.UserRole;
 import com.example.demo.user.repository.UserRepository;
 import com.example.demo.verification.entity.EmailVerificationToken;
 import com.example.demo.verification.repository.EmailVerificationTokenRepository;
@@ -60,7 +61,12 @@ public class EmailVerificationService {
         AppUser user = userRepository.findByEmailAndDeletedAtIsNull(record.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setAccountStatus(UserStatus.ACTIVE);
+        user.setEmailVerifiedAt(LocalDateTime.now());
+
+        if (user.getRole() == UserRole.CLIENT) {
+            user.setAccountStatus(UserStatus.ACTIVE);
+        }
+
         userRepository.save(user);
     }
 }
