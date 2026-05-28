@@ -65,6 +65,8 @@ public class AppUser {
 
     private LocalDateTime passwordUpdatedAt;
 
+    private LocalDateTime emailVerifiedAt;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

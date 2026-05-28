@@ -1,5 +1,8 @@
 package com.example.demo.user.entity;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import com.example.demo.agency.entity.Agency;
 
 import jakarta.persistence.DiscriminatorValue;
@@ -32,4 +35,8 @@ public class AgencyManager extends AppUser {
     private String digitalSignature;
 
     private int responsabilityLevel;
+
+    private LocalDateTime approvedAt;
+    private UUID approvedByAdminId;
+    private String rejectionReason;
 }

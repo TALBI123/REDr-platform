@@ -1,5 +1,6 @@
 package com.example.demo.agency.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -33,6 +34,14 @@ public class Agency {
     private AgencyStatus status;
 
     private LocalDateTime createdAt;
+
+    private String city;
+    private String phone;
+    private String email;
+    private String address;
+    private String description;
+    private LocalDate approvalDate;
+    private String suspensionReason;
 
     @PrePersist
     void onCreate() {
