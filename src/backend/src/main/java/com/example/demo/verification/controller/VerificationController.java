@@ -16,7 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/verification")
 @RequiredArgsConstructor
 public class VerificationController {
 
@@ -28,7 +28,7 @@ public class VerificationController {
         return ResponseEntity.ok(new AuthResponse("Email verified successfully. You can now log in.", null, null));
     }
 
-    @PostMapping("/resend-verification")
+    @PostMapping("/resend")
     public ResponseEntity<AuthResponse> resend(@RequestBody @Valid ResendVerificationRequest request) {
         verificationService.sendVerificationEmail(request.getEmail());
         return ResponseEntity.ok(new AuthResponse("Verification email sent.", request.getEmail(), null));
