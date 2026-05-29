@@ -3,9 +3,16 @@ package com.example.demo.common.exception;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
+import org.hibernate.LazyInitializationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +26,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(
             MethodArgumentNotValidException ex,
@@ -31,24 +40,12 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.BAD_REQUEST, message, request.getRequestURI());
     }
 
-    @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<ApiError> handleDisabled(
-            DisabledException ex,
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleBadRequest(
+            IllegalArgumentException ex,
             HttpServletRequest request
     ) {
-        return buildError(
-            HttpStatus.UNAUTHORIZED,
-            "Please verify your email before logging in",
-            request.getRequestURI()
-        );
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiError> handleAuth(
-            AuthenticationException ex,
-            HttpServletRequest request
-    ) {
-        return buildError(HttpStatus.UNAUTHORIZED, "Invalid email or password", request.getRequestURI());
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -59,12 +56,78 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiError> handleBadRequest(
-            IllegalArgumentException ex,
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<ApiError> handleLocked(
+            LockedException ex,
             HttpServletRequest request
     ) {
-        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
+        return buildError(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiError> handleDisabled(
+            DisabledException ex,
+            HttpServletRequest request
+    ) {
+        return buildError(
+            HttpStatus.UNAUTHORIZED,
+            "Account is not active. Please check your email or contact support.",
+            request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentials(
+            BadCredentialsException ex,
+            HttpServletRequest request
+    ) {
+        return buildError(HttpStatus.UNAUTHORIZED, "Invalid email or password", request.getRequestURI());
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<ApiError> handleInternalAuthenticationServiceException(
+            InternalAuthenticationServiceException ex,
+            HttpServletRequest request
+    ) {
+        Throwable cause = ex.getCause();
+        if (cause instanceof DisabledException) {
+            return buildError(
+                    HttpStatus.UNAUTHORIZED,
+                    "Account is not active. Please check your email or contact support.",
+                    request.getRequestURI()
+            );
+        }
+        if (cause instanceof LockedException) {
+            return buildError(HttpStatus.UNAUTHORIZED, cause.getMessage(), request.getRequestURI());
+        }
+
+        log.error("Authentication service error", ex);
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error. Contact support.", request.getRequestURI());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuth(
+            AuthenticationException ex,
+            HttpServletRequest request
+    ) {
+        return buildError(HttpStatus.UNAUTHORIZED, "Invalid email or password", request.getRequestURI());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(
+            AccessDeniedException ex,
+            HttpServletRequest request
+    ) {
+        return buildError(HttpStatus.FORBIDDEN, "Access denied", request.getRequestURI());
+    }
+
+    @ExceptionHandler(LazyInitializationException.class)
+    public ResponseEntity<ApiError> handleLazyInitialization(
+            LazyInitializationException ex,
+            HttpServletRequest request
+    ) {
+        log.error("Lazy initialization error - possible missing EAGER fetch", ex);
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error. Contact support.", request.getRequestURI());
     }
 
     @ExceptionHandler(Exception.class)
@@ -72,7 +135,8 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest request
     ) {
-        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error", request.getRequestURI());
+        log.error("Unhandled exception", ex);
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error. Contact support.", request.getRequestURI());
     }
 
     private ResponseEntity<ApiError> buildError(HttpStatus status, String message, String path) {
