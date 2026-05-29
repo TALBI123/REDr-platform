@@ -14,10 +14,12 @@ import com.example.demo.auth.dto.AuthResponse;
 import com.example.demo.auth.dto.LoginRequest;
 import com.example.demo.auth.dto.LoginResult;
 import com.example.demo.auth.dto.RegisterRequest;
+import com.example.demo.auth.dto.RegisterAgencyManagerRequest;
 import com.example.demo.auth.principal.CustomUserPrincipal;
 import com.example.demo.auth.service.AuthService;
 import com.example.demo.auth.service.RegistrationService;
 import com.example.demo.user.entity.Client;
+import com.example.demo.user.entity.AgencyManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -70,7 +72,7 @@ public class AuthController {
                 .build();
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register/client")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
@@ -83,4 +85,21 @@ public class AuthController {
 
         return ResponseEntity.status(201).body(body);
     }
+
+        @PostMapping("/register/agency")
+        public ResponseEntity<AuthResponse> registerAgency(
+                        @Valid @RequestBody RegisterAgencyManagerRequest request
+        ) {
+                AgencyManager manager =
+                        registrationService.registerAgencyManager(request);
+
+                AuthResponse body = new AuthResponse(
+                        "Registration successful. Please verify your email." +
+                        " Your account will be reviewed by an administrator.",
+                        manager.getEmail(),
+                        manager.getRole().name()
+                );
+
+                return ResponseEntity.status(201).body(body);
+        }
 }
