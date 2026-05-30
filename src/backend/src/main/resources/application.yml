@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: demo
+  config:
+    import: "optional:file:.env[.properties]"
+  datasource:
+    url: ${DB_URL:jdbc:h2:mem:testdb}
+    driver-class-name: org.h2.Driver
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD:}
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+  output:
+    ansi:
+      enabled: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-change-me-please-32-bytes-long}
+    expiration-days: ${JWT_EXPIRATION_DAYS:30}
+  sendgrid:
+    api-key: ${SENDGRID_API_KEY:}
+    from-email: ${SENDGRID_FROM_EMAIL:}
+    from-name: ${SENDGRID_FROM_NAME:REDr}
+  verification:
+    base-url: ${VERIFICATION_BASE_URL:http://localhost:8080/verification}
+    token-expiry-hours: ${VERIFICATION_TOKEN_EXPIRY_HOURS:24}
