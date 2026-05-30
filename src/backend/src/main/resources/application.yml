@@ -21,8 +21,10 @@ spring:
       enabled: true
   output:
     ansi:
-      enabled: true
-
+      enabled: DETECT
+logging:
+  level:
+    org.springframework.boot.context.config: DEBUG
 app:
   jwt:
     secret: ${JWT_SECRET:dev-secret-change-me-please-32-bytes-long}
