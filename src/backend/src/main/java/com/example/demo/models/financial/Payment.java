@@ -1,6 +1,9 @@
-package com.example.demo.models;
+package com.example.demo.models.financial;
 
+import com.example.demo.models.AuditableUuidEntity;
 import com.example.demo.models.enums.PaymentStatus;
+import com.example.demo.models.rental.Reservation;
+import com.example.demo.models.user.Client;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

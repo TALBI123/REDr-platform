@@ -1,6 +1,8 @@
-package com.example.demo.models;
+package com.example.demo.models.notification;
 
+import com.example.demo.models.AuditableUuidEntity;
 import com.example.demo.models.enums.NotificationStatus;
+import com.example.demo.models.user.AppUser;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

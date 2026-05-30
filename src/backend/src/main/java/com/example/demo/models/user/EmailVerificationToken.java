@@ -1,4 +1,4 @@
-package com.example.demo.models;
+package com.example.demo.models.user;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

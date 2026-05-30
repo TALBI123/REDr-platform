@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import com.example.demo.auth.dto.LoginRequest;
 import com.example.demo.auth.dto.LoginResult;
 import com.example.demo.auth.principal.CustomUserDetails;
-import com.example.demo.models.AppUser;
+import com.example.demo.models.user.AppUser;
 import com.example.demo.models.enums.UserStatus;
 import com.example.demo.user.repository.UserRepository;
 

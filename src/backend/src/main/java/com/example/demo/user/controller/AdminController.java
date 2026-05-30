@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.models.Agency;
+import com.example.demo.models.agency.Agency;
 import com.example.demo.agency.repository.AgencyRepository;
 import com.example.demo.user.dto.ApproveAgencyRequest;
 import com.example.demo.user.dto.RejectAgencyRequest;
@@ -38,7 +38,7 @@ public class AdminController {
     public ResponseEntity<String> listAgencies() {
         return ResponseEntity.ok("Admin: list all agencies");
     }
-
+    // '/agencies?status=pending&page=0&size=10'
     @GetMapping("/agencies/pending")
     public ResponseEntity<List<Agency>> pendingAgencies() {
         return ResponseEntity.ok(agencyAdminService.getPendingAgencies());
@@ -49,6 +49,7 @@ public class AdminController {
             @PathVariable String agencyId,
             @RequestBody ApproveAgencyRequest request
     ) {
+        System.out.println("Approving agency " + agencyId + " with comment: " + request.getComment());
         agencyAdminService.approveAgency(agencyId, request.getComment());
         return ResponseEntity.ok().build();
     }

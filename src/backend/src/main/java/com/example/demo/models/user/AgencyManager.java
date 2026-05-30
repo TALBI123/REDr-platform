@@ -1,5 +1,6 @@
-package com.example.demo.models;
+package com.example.demo.models.user;
 
+import com.example.demo.models.agency.Agency;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;

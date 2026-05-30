@@ -1,4 +1,4 @@
-package com.example.demo.models;
+package com.example.demo.models.notification;
 
 import com.example.demo.models.enums.MaintenanceStatus;
 import com.example.demo.models.enums.MaintenanceType;

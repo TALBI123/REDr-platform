@@ -1,6 +1,8 @@
-package com.example.demo.models;
+package com.example.demo.models.agency;
 
+import com.example.demo.models.BaseUuidEntity;
 import com.example.demo.models.enums.AgencyStatus;
+import com.example.demo.models.user.AgencyManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
@@ -30,7 +32,7 @@ public class Agency extends BaseUuidEntity {
     @Column(name = "city")
     private String city;
 
-    @Column(name = "phone")
+    @Column(name = "phone",unique=true)
     private String phone;
 
     // @Column(name = "location")

@@ -4,5 +4,7 @@ public enum AgencyStatus {
     PENDING,
     APPROVED,
     SUSPENDED,
+    REJECTED
+    ,
     CLOSED
 }

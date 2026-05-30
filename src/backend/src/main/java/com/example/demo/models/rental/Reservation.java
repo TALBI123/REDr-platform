@@ -1,6 +1,10 @@
-package com.example.demo.models;
+package com.example.demo.models.rental;
 
+import com.example.demo.models.BaseUuidEntity;
+import com.example.demo.models.agency.Car;
 import com.example.demo.models.enums.ReservationStatus;
+import com.example.demo.models.financial.Payment;
+import com.example.demo.models.user.Client;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

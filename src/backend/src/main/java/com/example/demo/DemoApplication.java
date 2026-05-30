@@ -10,12 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.demo.models.Agency;
+import com.example.demo.models.agency.Agency;
 import com.example.demo.models.enums.AgencyStatus;
 import com.example.demo.agency.repository.AgencyRepository;
-import com.example.demo.models.Admin;
-import com.example.demo.models.AgencyManager;
-import com.example.demo.models.Client;
+import com.example.demo.models.user.Admin;
+import com.example.demo.models.user.AgencyManager;
+import com.example.demo.models.user.Client;
 import com.example.demo.models.enums.UserRole;
 import com.example.demo.models.enums.UserStatus;
 import com.example.demo.user.repository.UserRepository;

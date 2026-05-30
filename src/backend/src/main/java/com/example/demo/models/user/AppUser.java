@@ -1,5 +1,6 @@
-package com.example.demo.models;
+package com.example.demo.models.user;
 
+import com.example.demo.models.AuditableUuidEntity;
 import com.example.demo.models.enums.UserRole;
 import com.example.demo.models.enums.UserStatus;
 import jakarta.persistence.Column;

@@ -1,9 +1,12 @@
-package com.example.demo.models;
+package com.example.demo.models.agency;
 
+import com.example.demo.models.BaseUuidEntity;
 import com.example.demo.models.enums.ConditionStatus;
 import com.example.demo.models.enums.FuelType;
 import com.example.demo.models.enums.TransmissionType;
 import com.example.demo.models.enums.VehicleStatus;
+import com.example.demo.models.rental.ConditionReport;
+import com.example.demo.models.rental.Reservation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CollectionTable;

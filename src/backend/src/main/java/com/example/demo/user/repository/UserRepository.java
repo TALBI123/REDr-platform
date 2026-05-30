@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.models.AppUser;
+import com.example.demo.models.user.AppUser;
 import com.example.demo.models.enums.UserRole;
 
 public interface UserRepository extends JpaRepository<AppUser, String> {

@@ -18,8 +18,8 @@ import com.example.demo.auth.dto.RegisterAgencyManagerRequest;
 import com.example.demo.auth.principal.CustomUserDetails;
 import com.example.demo.auth.service.AuthService;
 import com.example.demo.auth.service.RegistrationService;
-import com.example.demo.models.Client;
-import com.example.demo.models.AgencyManager;
+import com.example.demo.models.user.Client;
+import com.example.demo.models.user.AgencyManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -30,75 +30,70 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+        private final AuthService authService;
         private final RegistrationService registrationService;
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
-            @Valid @RequestBody LoginRequest loginRequest,
-            HttpServletRequest request
-    ) {
-        LoginResult result = authService.login(loginRequest);
-        String accessToken = result.token();
-        CustomUserDetails principal = result.principal();
+        @PostMapping("/login")
+        public ResponseEntity<AuthResponse> login(
+                        @Valid @RequestBody LoginRequest loginRequest,
+                        HttpServletRequest request) {
+                LoginResult result = authService.login(loginRequest);
+                String accessToken = result.token();
+                CustomUserDetails principal = result.principal();
 
-        ResponseCookie cookie = ResponseCookie.from("ACCESS_TOKEN", accessToken)
-                .httpOnly(true)
-                .secure(request.isSecure())
-                .path("/")
-                .sameSite("Lax")
-                .maxAge(Duration.ofDays(30))
-                .build();
+                ResponseCookie cookie = ResponseCookie.from("ACCESS_TOKEN", accessToken)
+                                .httpOnly(true)
+                                .secure(request.isSecure())
+                                .path("/")
+                                .sameSite("Lax")
+                                .maxAge(Duration.ofDays(30))
+                                .build();
 
-        AuthResponse response = new AuthResponse("Login successful", principal.getUsername(), principal.getRole().name());
+                AuthResponse response = new AuthResponse("Login successful", principal.getUsername(),
+                                principal.getRole().name());
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(response);
-    }
+                return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                                .body(response);
+        }
 
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request) {
-        ResponseCookie clear = ResponseCookie.from("ACCESS_TOKEN", "")
-                .httpOnly(true)
-                .secure(request.isSecure())
-                .path("/")
-                .sameSite("Lax")
-                .maxAge(0)
-                .build();
+        @PostMapping("/logout")
+        public ResponseEntity<Void> logout(HttpServletRequest request) {
+                ResponseCookie clear = ResponseCookie.from("ACCESS_TOKEN", "")
+                                .httpOnly(true)
+                                .secure(request.isSecure())
+                                .path("/")
+                                .sameSite("Lax")
+                                .maxAge(0)
+                                .build();
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, clear.toString())
-                .build();
-    }
+                return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, clear.toString())
+                                .build();
+        }
 
-    @PostMapping("/register/client")
-    public ResponseEntity<AuthResponse> register(
-            @Valid @RequestBody RegisterRequest request
-    ) {
-        Client client = registrationService.register(request);
-        AuthResponse body = new AuthResponse(
-                "Registration successful. Please verify your email.",
-                client.getEmail(),
-                client.getRole().name()
-        );
+        @PostMapping("/register/client")
+        public ResponseEntity<AuthResponse> register(
+                        @Valid @RequestBody RegisterRequest request) {
+                Client client = registrationService.register(request);
+                AuthResponse body = new AuthResponse(
+                                "Registration successful. Please verify your email.",
+                                client.getEmail(),
+                                client.getRole().name());
 
-        return ResponseEntity.status(201).body(body);
-    }
+                return ResponseEntity.status(201).body(body);
+        }
 
         @PostMapping("/register/agency")
         public ResponseEntity<AuthResponse> registerAgency(
-                        @Valid @RequestBody RegisterAgencyManagerRequest request
-        ) {
-                AgencyManager manager =
-                        registrationService.registerAgencyManager(request);
+                        @Valid @RequestBody RegisterAgencyManagerRequest request) {
+                AgencyManager manager = registrationService.registerAgencyManager(request);
 
                 AuthResponse body = new AuthResponse(
-                        "Registration successful. Please verify your email." +
-                        " Your account will be reviewed by an administrator.",
-                        manager.getEmail(),
-                        manager.getRole().name()
-                );
+                                "Registration successful. Please verify your email." +
+                                                " Your account will be reviewed by an administrator.",
+                                manager.getEmail(),
+                                manager.getRole().name());
 
                 return ResponseEntity.status(201).body(body);
         }

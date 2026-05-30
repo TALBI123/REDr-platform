@@ -9,6 +9,7 @@ public class TestController {
 
     @GetMapping("/test")
     public String test(Authentication authentication) {
+        
         return "Authenticated as: " + authentication.getName();
     }
 }

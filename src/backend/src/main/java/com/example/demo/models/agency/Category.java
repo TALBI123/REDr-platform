@@ -1,5 +1,6 @@
-package com.example.demo.models;
+package com.example.demo.models.agency;
 
+import com.example.demo.models.AuditableUuidEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

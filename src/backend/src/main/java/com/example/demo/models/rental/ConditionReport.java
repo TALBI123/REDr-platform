@@ -1,5 +1,7 @@
-package com.example.demo.models;
+package com.example.demo.models.rental;
 
+import com.example.demo.models.agency.Car;
+import com.example.demo.models.agency.Photo;
 import com.example.demo.models.enums.ConditionReportType;
 import com.example.demo.models.enums.FuelLevel;
 import com.example.demo.models.enums.VehicleStatus;

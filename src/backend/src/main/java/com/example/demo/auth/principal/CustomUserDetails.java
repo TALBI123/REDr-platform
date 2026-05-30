@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.demo.models.AgencyManager;
-import com.example.demo.models.AppUser;
+import com.example.demo.models.user.AgencyManager;
+import com.example.demo.models.user.AppUser;
 import com.example.demo.models.enums.AgencyStatus;
 import com.example.demo.models.enums.UserRole;
 import com.example.demo.models.enums.UserStatus;

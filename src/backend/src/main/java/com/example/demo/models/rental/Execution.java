@@ -1,4 +1,4 @@
-package com.example.demo.models;
+package com.example.demo.models.rental;
 
 import com.example.demo.models.enums.ExecutionStatus;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

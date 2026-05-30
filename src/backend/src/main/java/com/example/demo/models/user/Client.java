@@ -1,5 +1,7 @@
-package com.example.demo.models;
+package com.example.demo.models.user;
 
+import com.example.demo.models.financial.Payment;
+import com.example.demo.models.rental.Reservation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;

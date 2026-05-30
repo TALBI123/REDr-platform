@@ -21,10 +21,13 @@ spring:
       enabled: true
   output:
     ansi:
-      enabled: DETECT
+      enabled: ALWAYS
 logging:
   level:
-    org.springframework.boot.context.config: DEBUG
+    org.springframework.boot.context.config: TRACE 
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"
+
 app:
   jwt:
     secret: ${JWT_SECRET:dev-secret-change-me-please-32-bytes-long}

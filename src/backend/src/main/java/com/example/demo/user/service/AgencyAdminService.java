@@ -7,12 +7,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.models.Agency;
+import com.example.demo.models.agency.Agency;
 import com.example.demo.models.enums.AgencyStatus;
 import com.example.demo.agency.repository.AgencyRepository;
 import com.example.demo.common.exception.ResourceNotFoundException;
 import com.example.demo.common.security.SecurityUtils;
-import com.example.demo.models.AgencyManager;
+import com.example.demo.models.user.AgencyManager;
 import com.example.demo.models.enums.UserRole;
 import com.example.demo.models.enums.UserStatus;
 import com.example.demo.user.repository.UserRepository;
@@ -75,7 +75,7 @@ public class AgencyAdminService {
                 "Agency is not in PENDING status");
         }
 
-        agency.setStatus(AgencyStatus.CLOSED);
+        agency.setStatus(AgencyStatus.REJECTED);
         agency.setSuspensionReason(reason);
         agencyRepository.save(agency);
 
