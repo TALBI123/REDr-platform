@@ -1,4 +1,4 @@
-package com.example.demo.user.enums;
+package com.example.demo.models.enums;
 
 public enum UserStatus {
     ACTIVE,

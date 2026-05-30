@@ -1,4 +1,4 @@
-package com.example.demo.agency.entity;
+package com.example.demo.models.enums;
 
 public enum AgencyStatus {
     PENDING,

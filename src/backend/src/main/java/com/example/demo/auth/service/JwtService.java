@@ -11,7 +11,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.auth.principal.CustomUserPrincipal;
+import com.example.demo.auth.principal.CustomUserDetails;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +30,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateAccessToken(CustomUserPrincipal principal) {
+    public String generateAccessToken(CustomUserDetails principal) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("uid", principal.getUserId());
         claims.put("role", principal.getRole().name());

@@ -1,7 +1,6 @@
 package com.example.demo.user.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.agency.entity.Agency;
+import com.example.demo.models.Agency;
 import com.example.demo.agency.repository.AgencyRepository;
 import com.example.demo.user.dto.ApproveAgencyRequest;
 import com.example.demo.user.dto.RejectAgencyRequest;
@@ -24,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('SUPER_ADMIN')")
 public class AdminController {
 
     private final AgencyAdminService agencyAdminService;
@@ -47,7 +46,7 @@ public class AdminController {
 
     @PostMapping("/agencies/{agencyId}/approve")
     public ResponseEntity<Void> approveAgency(
-            @PathVariable UUID agencyId,
+            @PathVariable String agencyId,
             @RequestBody ApproveAgencyRequest request
     ) {
         agencyAdminService.approveAgency(agencyId, request.getComment());
@@ -56,7 +55,7 @@ public class AdminController {
 
     @PostMapping("/agencies/{agencyId}/reject")
     public ResponseEntity<Void> rejectAgency(
-            @PathVariable UUID agencyId,
+            @PathVariable String agencyId,
             @jakarta.validation.Valid @RequestBody RejectAgencyRequest request
     ) {
         agencyAdminService.rejectAgency(agencyId, request.getReason());
@@ -65,7 +64,7 @@ public class AdminController {
 
     @PostMapping("/agencies/{agencyId}/suspend")
     public ResponseEntity<Void> suspendAgency(
-            @PathVariable UUID agencyId,
+            @PathVariable String agencyId,
             @jakarta.validation.Valid @RequestBody RejectAgencyRequest request
     ) {
         agencyAdminService.suspendAgency(agencyId, request.getReason());

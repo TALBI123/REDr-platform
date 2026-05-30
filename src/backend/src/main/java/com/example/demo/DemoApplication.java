@@ -10,14 +10,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.demo.agency.entity.Agency;
-import com.example.demo.agency.entity.AgencyStatus;
+import com.example.demo.models.Agency;
+import com.example.demo.models.enums.AgencyStatus;
 import com.example.demo.agency.repository.AgencyRepository;
-import com.example.demo.user.entity.Admin;
-import com.example.demo.user.entity.AgencyManager;
-import com.example.demo.user.entity.Client;
-import com.example.demo.user.enums.UserRole;
-import com.example.demo.user.enums.UserStatus;
+import com.example.demo.models.Admin;
+import com.example.demo.models.AgencyManager;
+import com.example.demo.models.Client;
+import com.example.demo.models.enums.UserRole;
+import com.example.demo.models.enums.UserStatus;
 import com.example.demo.user.repository.UserRepository;
 
 @SpringBootApplication
@@ -54,6 +54,15 @@ public class DemoApplication {
         Agency agency = new Agency();
         agency.setName("Dev Agency");
         agency.setStatus(AgencyStatus.APPROVED);
+        agency.setDescription("Development agency");
+        agency.setRating(0.0f);
+        agency.setAddress("123 Dev Street");
+        agency.setEmail("agency-contact@gmail.com");
+        agency.setIban("FR7630006000011234567890189");
+        agency.setLogoUrl("https://example.com/logo.png");
+        agency.setApprovalDate(LocalDate.now());
+        agency.setSuspensionReason(null); // peut être null
+
         return agencyRepository.save(agency);
     }
 
@@ -67,10 +76,13 @@ public class DemoApplication {
         admin.setPassword(passwordEncoder.encode("admin123"));
         admin.setFirstName("Demo");
         admin.setLastName("Admin");
-        admin.setRole(UserRole.ADMIN);
+        // admin.setEmail("lhiba@gmail.com");
+        // admin.setPassword("admin123");
+        // admin.setPhone("1234567890");
+        admin.setRole(UserRole.SUPER_ADMIN);
         admin.setAccountStatus(UserStatus.ACTIVE);
-        admin.setInscriptionDate(LocalDate.now());
-        admin.setPasswordUpdatedAt(LocalDateTime.now());
+        // admin.setInscriptionDate(LocalDate.now());
+        // admin.setPasswordUpdatedAt(LocalDateTime.now());
         admin.setPermissions("ALL");
         admin.setAdminLevel(1);
         userRepository.save(admin);
@@ -92,10 +104,11 @@ public class DemoApplication {
         manager.setLastName("Manager");
         manager.setRole(UserRole.AGENCY_MANAGER);
         manager.setAccountStatus(UserStatus.ACTIVE);
-        manager.setInscriptionDate(LocalDate.now());
+        // manager.setInscriptionDate(LocalDate.now());
+
         manager.setPasswordUpdatedAt(LocalDateTime.now());
         manager.setAgency(devAgency);
-        manager.setLicenceNumber("MANAGER-LICENCE-001");
+        // manager.setLicenceNumber("MANAGER-LICENCE-001");
         manager.setNationalId("NATIONAL-ID-MANAGER-001");
         manager.setDigitalSignature("demo-manager-signature");
         manager.setResponsabilityLevel(1);
@@ -114,7 +127,7 @@ public class DemoApplication {
         client.setLastName("Client");
         client.setRole(UserRole.CLIENT);
         client.setAccountStatus(UserStatus.ACTIVE);
-        client.setInscriptionDate(LocalDate.now());
+        // client.setInscriptionDate(LocalDate.now());
         client.setPasswordUpdatedAt(LocalDateTime.now());
         client.setLicenceNumber("CLIENT-LICENCE-001");
         client.setLocation("Demo City");

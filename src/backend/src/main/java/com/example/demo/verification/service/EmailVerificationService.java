@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.common.exception.ResourceNotFoundException;
-import com.example.demo.user.entity.AppUser;
-import com.example.demo.user.enums.UserStatus;
-import com.example.demo.user.enums.UserRole;
+import com.example.demo.models.AppUser;
+import com.example.demo.models.enums.UserStatus;
+import com.example.demo.models.enums.UserRole;
 import com.example.demo.user.repository.UserRepository;
-import com.example.demo.verification.entity.EmailVerificationToken;
+import com.example.demo.models.EmailVerificationToken;
 import com.example.demo.verification.repository.EmailVerificationTokenRepository;
 
 import lombok.RequiredArgsConstructor;

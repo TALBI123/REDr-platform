@@ -12,9 +12,9 @@ import org.springframework.util.StringUtils;
 
 import com.example.demo.auth.dto.LoginRequest;
 import com.example.demo.auth.dto.LoginResult;
-import com.example.demo.auth.principal.CustomUserPrincipal;
-import com.example.demo.user.entity.AppUser;
-import com.example.demo.user.enums.UserStatus;
+import com.example.demo.auth.principal.CustomUserDetails;
+import com.example.demo.models.AppUser;
+import com.example.demo.models.enums.UserStatus;
 import com.example.demo.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -82,7 +82,7 @@ public class AuthService {
         user.setLockUntil(null);
         userRepository.save(user);
 
-        CustomUserPrincipal principal = (CustomUserPrincipal) userDetailsService.loadUserByUsername(request.getEmail());
+        CustomUserDetails principal = (CustomUserDetails) userDetailsService.loadUserByUsername(request.getEmail());
         String token = jwtService.generateAccessToken(principal);
         return new LoginResult(token, principal);
     }

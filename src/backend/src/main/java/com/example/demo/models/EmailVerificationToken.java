@@ -1,4 +1,4 @@
-package com.example.demo.verification.entity;
+package com.example.demo.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

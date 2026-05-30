@@ -1,6 +1,5 @@
 package com.example.demo.booking.controller;
 
-import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,9 +19,9 @@ public class BookingController {
     private final SecurityUtils securityUtils;
 
     @GetMapping("/my")
-    @PreAuthorize("hasAnyRole('CLIENT','ADMIN')")
+    @PreAuthorize("hasAnyRole('CLIENT','SUPER_ADMIN')")
     public ResponseEntity<String> myBookings() {
-        UUID userId = securityUtils.getCurrentUserId();
+        String userId = securityUtils.getCurrentUserId();
         return ResponseEntity.ok("Bookings for user " + userId);
     }
 }

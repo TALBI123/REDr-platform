@@ -2,15 +2,14 @@ package com.example.demo.agency.repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.agency.entity.Agency;
-import com.example.demo.agency.entity.AgencyStatus;
+import com.example.demo.models.Agency;
+import com.example.demo.models.enums.AgencyStatus;
 
-public interface AgencyRepository extends JpaRepository<Agency, UUID> {
-    Optional<Agency> findByIdAndStatus(UUID id, AgencyStatus status);
+public interface AgencyRepository extends JpaRepository<Agency, String> {
+    Optional<Agency> findByIdAndStatus(String id, AgencyStatus status);
     Optional<Agency> findByName(String name);
     List<Agency> findByStatus(AgencyStatus status);
 }

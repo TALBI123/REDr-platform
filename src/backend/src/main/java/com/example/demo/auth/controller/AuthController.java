@@ -15,11 +15,11 @@ import com.example.demo.auth.dto.LoginRequest;
 import com.example.demo.auth.dto.LoginResult;
 import com.example.demo.auth.dto.RegisterRequest;
 import com.example.demo.auth.dto.RegisterAgencyManagerRequest;
-import com.example.demo.auth.principal.CustomUserPrincipal;
+import com.example.demo.auth.principal.CustomUserDetails;
 import com.example.demo.auth.service.AuthService;
 import com.example.demo.auth.service.RegistrationService;
-import com.example.demo.user.entity.Client;
-import com.example.demo.user.entity.AgencyManager;
+import com.example.demo.models.Client;
+import com.example.demo.models.AgencyManager;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -40,7 +40,7 @@ public class AuthController {
     ) {
         LoginResult result = authService.login(loginRequest);
         String accessToken = result.token();
-        CustomUserPrincipal principal = result.principal();
+        CustomUserDetails principal = result.principal();
 
         ResponseCookie cookie = ResponseCookie.from("ACCESS_TOKEN", accessToken)
                 .httpOnly(true)

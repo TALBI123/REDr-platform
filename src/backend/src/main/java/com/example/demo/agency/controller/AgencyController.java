@@ -1,6 +1,5 @@
 package com.example.demo.agency.controller;
 
-import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +25,8 @@ public class AgencyController {
     }
 
     @GetMapping("/{agencyId}")
-    @PreAuthorize("hasAnyRole('ADMIN','AGENCY_MANAGER')")
-    public ResponseEntity<String> getOne(@PathVariable UUID agencyId) {
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','AGENCY_MANAGER')")
+    public ResponseEntity<String> getOne(@PathVariable String agencyId) {
         securityUtils.assertAgencyAccess(agencyId);
         return ResponseEntity.ok("Agency " + agencyId);
     }

@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.auth.dto.RegisterRequest;
 import com.example.demo.auth.dto.RegisterAgencyManagerRequest;
 import com.example.demo.verification.service.EmailVerificationService;
-import com.example.demo.user.entity.Client;
-import com.example.demo.user.entity.AgencyManager;
-import com.example.demo.agency.entity.Agency;
-import com.example.demo.agency.entity.AgencyStatus;
-import com.example.demo.user.enums.UserRole;
-import com.example.demo.user.enums.UserStatus;
+import com.example.demo.models.Client;
+import com.example.demo.models.AgencyManager;
+import com.example.demo.models.Agency;
+import com.example.demo.models.enums.AgencyStatus;
+import com.example.demo.models.enums.UserRole;
+import com.example.demo.models.enums.UserStatus;
 import com.example.demo.user.repository.UserRepository;
 import com.example.demo.agency.repository.AgencyRepository;
 

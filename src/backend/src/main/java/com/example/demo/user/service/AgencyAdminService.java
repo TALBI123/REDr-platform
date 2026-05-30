@@ -3,19 +3,18 @@ package com.example.demo.user.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.agency.entity.Agency;
-import com.example.demo.agency.entity.AgencyStatus;
+import com.example.demo.models.Agency;
+import com.example.demo.models.enums.AgencyStatus;
 import com.example.demo.agency.repository.AgencyRepository;
 import com.example.demo.common.exception.ResourceNotFoundException;
 import com.example.demo.common.security.SecurityUtils;
-import com.example.demo.user.entity.AgencyManager;
-import com.example.demo.user.enums.UserRole;
-import com.example.demo.user.enums.UserStatus;
+import com.example.demo.models.AgencyManager;
+import com.example.demo.models.enums.UserRole;
+import com.example.demo.models.enums.UserStatus;
 import com.example.demo.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,7 @@ public class AgencyAdminService {
         return agencyRepository.findByStatus(AgencyStatus.PENDING);
     }
 
-    public void approveAgency(UUID agencyId, String comment) {
+    public void approveAgency(String agencyId, String comment) {
 
         Agency agency = agencyRepository.findById(agencyId)
             .orElseThrow(() -> new ResourceNotFoundException(
@@ -48,7 +47,7 @@ public class AgencyAdminService {
         agency.setApprovalDate(LocalDate.now());
         agencyRepository.save(agency);
 
-        UUID adminId = securityUtils.getCurrentUserId();
+        String adminId = securityUtils.getCurrentUserId();
 
         userRepository.findByRole(UserRole.AGENCY_MANAGER).stream()
             .filter(u -> u instanceof AgencyManager)
@@ -65,7 +64,7 @@ public class AgencyAdminService {
             });
     }
 
-    public void rejectAgency(UUID agencyId, String reason) {
+    public void rejectAgency(String agencyId, String reason) {
 
         Agency agency = agencyRepository.findById(agencyId)
             .orElseThrow(() -> new ResourceNotFoundException(
@@ -93,7 +92,7 @@ public class AgencyAdminService {
             });
     }
 
-    public void suspendAgency(UUID agencyId, String reason) {
+    public void suspendAgency(String agencyId, String reason) {
 
         Agency agency = agencyRepository.findById(agencyId)
             .orElseThrow(() -> new ResourceNotFoundException(
@@ -109,7 +108,7 @@ public class AgencyAdminService {
         agencyRepository.save(agency);
 
         // Do NOT touch manager accountStatus here.
-        // CustomUserPrincipal.isEnabled() already checks agencyStatus on every
+        // CustomUserDetails.isEnabled() already checks agencyStatus on every
         // request. The manager's next API call will return 401 automatically
         // because the agency is now SUSPENDED. No token invalidation needed.
     }

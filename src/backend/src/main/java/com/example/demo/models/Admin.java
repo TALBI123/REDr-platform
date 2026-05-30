@@ -1,21 +1,24 @@
-package com.example.demo.user.entity;
+package com.example.demo.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity
-@Table(name = "admin")
-@DiscriminatorValue("ADMIN")
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@DiscriminatorValue("SUPER_ADMIN")
+@Table(name = "admins")
 public class Admin extends AppUser {
+
+    @Column(name = "permissions")
     private String permissions;
+
+    @Column(name = "admin_level")
     private int adminLevel;
 }
