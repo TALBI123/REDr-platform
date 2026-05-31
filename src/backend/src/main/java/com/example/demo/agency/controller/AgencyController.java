@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/agencies")
-@RequiredArgsConstructor
-public class AgencyController {
+// @RestController
+// @RequestMapping("/agencies")
+// @RequiredArgsConstructor
+// public class AgencyController {
 
-    private final SecurityUtils securityUtils;
-    private final AgencyService agencyService;
+//     private final SecurityUtils securityUtils;
+//     private final AgencyService agencyService;
     
-    @GetMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<List<Agency>> getAgencies() {
+//     @GetMapping
+//     @PreAuthorize("hasRole('SUPER_ADMIN')")
+//     public ResponseEntity<List<Agency>> getAgencies() {
 
-        return ResponseEntity.ok(agencyService.getAllAgencies());
-    }
+//         return ResponseEntity.ok(agencyService.getAllAgencies());
+//     }
 
-    @GetMapping("/{agencyId}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','AGENCY_MANAGER')")
-    public ResponseEntity<String> getOne(@PathVariable String agencyId) {
-        securityUtils.assertAgencyAccess(agencyId);
-        return ResponseEntity.ok("Agency " + agencyId);
-    }
-}
+//     @GetMapping("/{agencyId}")
+//     @PreAuthorize("hasAnyRole('SUPER_ADMIN','AGENCY_MANAGER')")
+//     public ResponseEntity<String> getOne(@PathVariable String agencyId) {
+//         securityUtils.assertAgencyAccess(agencyId);
+//         return ResponseEntity.ok("Agency " + agencyId);
+//     }
+// }
