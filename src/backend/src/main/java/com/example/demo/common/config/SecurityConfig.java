@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.example.demo.auth.filter.JwtFilter;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +38,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/auth/**", "/h2-console/**", "/verification/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/public/agencies/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("SUPER_ADMIN")
                     .requestMatchers(HttpMethod.POST, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
                     .requestMatchers(HttpMethod.PUT, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
