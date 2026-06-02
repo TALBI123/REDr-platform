@@ -1,7 +1,7 @@
 # Fichiers de build Gradle
 build/
 .gradle/
-gradle/wrapper/gradle-wrapper.jar
+# gradle/wrapper/gradle-wrapper.jar
 
 # Dossiers de l'IDE
 .idea/

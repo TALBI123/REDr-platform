@@ -1,7 +1,9 @@
-FROM gradle:8.14-jdk21 As build
+FROM gradle:8.14-jdk17 As build
 WorkDir /app
 COPY build.gradle settings.gradle gradlew ./
 COPY gradle gradle
+
+COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/
 RUN  chmod +x gradlew
 RUN ./gradlew dependencies --no-daemon
 
