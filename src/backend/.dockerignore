@@ -1,0 +1,40 @@
+# Fichiers de build Gradle
+build/
+.gradle/
+gradle/wrapper/gradle-wrapper.jar
+
+# Dossiers de l'IDE
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Fichiers de configuration locaux
+.env
+.env.*
+application-local.properties
+
+# Dossiers de logs
+logs/
+*.log
+
+# Rapport et documentation
+report/
+docs/
+scripts/
+sql/
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*.swo
+*~
+
+# Tests
+src/test/
+
+# Fichiers système
+.DS_Store
+Thumbs.db

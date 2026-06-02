@@ -1,0 +1,46 @@
+# Connectez-vous à psql
+psql -U postgres -d votre_base
+
+# Exécutez le fichier complet
+\i 'C:/Users/moham/Documents/mdl-project/src/backend/sql/complete_data.sql'
+
+# Ou exécutez-le ligne par ligne
+\i 'C:/Users/moham/Documents/mdl-project/src/backend/sql/agencies.sql'
+\i 'C:/Users/moham/Documents/mdl-project/src/backend/sql/categories.sql'
+\i 'C:/Users/moham/Documents/mdl-project/src/backend/sql/users.sql'
+
+
+psql -h votre-projet.supabase.co -p 5432 -d postgres -U postgres -f script.sql
+
+
+
+
+
+Pour PostgreSQL local :
+
+# Rendre le script exécutable
+chmod +x run-local.sh
+
+# Exécuter avec le fichier SQL par défaut (data.sql)
+./run-local.sh
+
+# Exécuter avec un fichier SQL spécifique
+./run-local.sh mon_fichier.sql
+
+# Avec variables d'environnement
+DB_NAME=ma_base DB_USER=mon_user ./run-local.sh
+
+
+Pour PostgreSQL distant (Supabase) :
+# Rendre le script exécutable
+chmod +x run-remote.sh
+
+# Exécuter
+./run-remote.sh
+
+# Suivre les instructions interactives
+
+
+Avec Docker :
+chmod +x run-docker.sh
+./run-docker.sh
