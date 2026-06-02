@@ -23,16 +23,15 @@ import com.example.demo.user.repository.UserRepository;
 @SpringBootApplication
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 
-	@Bean
+    @Bean
     CommandLineRunner start(
             UserRepository userRepository,
             AgencyRepository agencyRepository,
-            PasswordEncoder passwordEncoder
-    ) {
+            PasswordEncoder passwordEncoder) {
         return args -> {
             Agency devAgency = findOrCreateDevAgency(agencyRepository);
 
@@ -43,27 +42,42 @@ public class DemoApplication {
     }
 
     private Agency findOrCreateDevAgency(AgencyRepository agencyRepository) {
-        Optional<Agency> existingAgency = agencyRepository.findAll().stream()
-                .filter(agency -> "Dev Agency".equals(agency.getName()))
-                .findFirst();
+        // Optional<Agency> existingAgency = agencyRepository.findAll().stream()
+        // .filter(agency -> "Dev Agency".equals(agency.getName()))
+        // .findFirst();
 
-        if (existingAgency.isPresent()) {
-            return existingAgency.get();
-        }
+        // if (existingAgency.isPresent()) {
+        // return existingAgency.get();
+        // }
 
-        Agency agency = new Agency();
-        agency.setName("Dev Agency");
-        agency.setStatus(AgencyStatus.APPROVED);
-        agency.setDescription("Development agency");
-        agency.setRating(0.0f);
-        agency.setAddress("123 Dev Street");
-        agency.setEmail("agency-contact@gmail.com");
-        agency.setIban("FR7630006000011234567890189");
-        agency.setLogoUrl("https://example.com/logo.png");
-        agency.setApprovalDate(LocalDate.now());
-        agency.setSuspensionReason(null); // peut être null
+        // Agency agency = new Agency();
+        // agency.setName("Dev Agency");
+        // agency.setStatus(AgencyStatus.APPROVED);
+        // agency.setDescription("Development agency");
+        // agency.setRating(0.0f);
+        // agency.setAddress("123 Dev Street");
+        // agency.setEmail("agency-contact@gmail.com");
+        // agency.setIban("FR7630006000011234567890189");
+        // agency.setLogoUrl("https://example.com/logo.png");
+        // agency.setApprovalDate(LocalDate.now());
+        // agency.setSuspensionReason(null); // peut être null
 
-        return agencyRepository.save(agency);
+        // return agencyRepository.save(agency);
+        return agencyRepository.findByName("Dev Agency")
+                .orElseGet(() -> {
+                    Agency agency = new Agency();
+                    agency.setName("Dev Agency");
+                    agency.setStatus(AgencyStatus.APPROVED);
+                    agency.setDescription("Development agency");
+                    agency.setRating(0.0f);
+                    agency.setAddress("123 Dev Street");
+                    agency.setEmail("agency-contact@gmail.com");
+                    agency.setIban("FR7630006000011234567890189");
+                    agency.setLogoUrl("https://example.com/logo.png");
+                    agency.setApprovalDate(LocalDate.now());
+                    return agencyRepository.save(agency);
+                });
+
     }
 
     private void createAdminIfMissing(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -91,8 +105,7 @@ public class DemoApplication {
     private void createManagerIfMissing(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            Agency devAgency
-    ) {
+            Agency devAgency) {
         if (userRepository.existsByEmail("manager@demo.com")) {
             return;
         }
