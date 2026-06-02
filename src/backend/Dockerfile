@@ -1,12 +1,39 @@
-FROM gradle:8.14-jdk17 As build
-WorkDir /app
+# FROM gradle:8.14-jdk17 As build
+# WorkDir /app
+# COPY build.gradle settings.gradle gradlew ./
+# COPY gradle gradle
+
+# COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/
+# RUN  chmod +x gradlew
+# RUN ./gradlew dependencies --no-daemon
+
+# COPY src src
+# RUN ./gradlew build -x test --no-daemon
+
+# FROM eclipse-temurin:21-jre-alpine
+# WORKDIR /app
+# RUN apk add --no-cache tzdata
+
+# # Créer un utilisateur non-root
+# RUN addgroup -S spring && adduser -S spring -G spring
+# USER spring:spring
+
+# COPY --from=build /app/build/libs/*.jar app.jar
+
+# EXPOSE 8080
+
+# # Commande de démarrage avec optimisation mémoire JVM
+# ENTRYPOINT ["java", \
+#     "-XX:+UseContainerSupport", \
+#     "-XX:MaxRAMPercentage=75.0", \
+#     "-jar", "app.jar"]
+FROM gradle:8.14-jdk17 AS build
+WORKDIR /app
 COPY build.gradle settings.gradle gradlew ./
 COPY gradle gradle
-
 COPY gradle/wrapper/gradle-wrapper.jar gradle/wrapper/
-RUN  chmod +x gradlew
+RUN chmod +x gradlew
 RUN ./gradlew dependencies --no-daemon
-
 COPY src src
 RUN ./gradlew build -x test --no-daemon
 
@@ -18,12 +45,17 @@ RUN apk add --no-cache tzdata
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
-COPY --from=build /app/build/libs/*.jar app.jar
+# Copier tous les JARs vers le répertoire /app/
+COPY --from=build /app/build/libs/*.jar /app/
+
+# Lister les fichiers pour déboguer (optionnel)
+RUN ls -la /app/
 
 EXPOSE 8080
 
-# Commande de démarrage avec optimisation mémoire JVM
+# Note: Si vous avez plusieurs JARs, vous devez spécifier lequel exécuter
+# Utilisez le JAR principal (sans -plain)
 ENTRYPOINT ["java", \
     "-XX:+UseContainerSupport", \
     "-XX:MaxRAMPercentage=75.0", \
-    "-jar", "app.jar"]
+    "-jar", "/app/demo-0.0.1-SNAPSHOT.jar"]
