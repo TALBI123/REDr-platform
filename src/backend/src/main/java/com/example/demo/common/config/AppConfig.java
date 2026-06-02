@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.sendgrid.SendGrid;
 
 @Configuration
@@ -19,5 +21,17 @@ public class AppConfig {
     @Bean
     public SendGrid sendGrid(@Value("${app.sendgrid.api-key}") String apiKey) {
         return new SendGrid(apiKey);
+    }
+
+    @Bean
+    public Cloudinary cloudinary(
+            @Value("${app.cloudinary.cloud-name}") String cloudName,
+            @Value("${app.cloudinary.api-key}") String apiKey,
+            @Value("${app.cloudinary.api-secret}") String apiSecret) {
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", cloudName,
+                "api_key", apiKey,
+                "api_secret", apiSecret,
+                "secure", true));
     }
 }

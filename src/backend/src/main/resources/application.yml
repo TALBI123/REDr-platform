@@ -5,14 +5,15 @@ spring:
     import: "optional:file:.env[.properties]"
   datasource:
     url: ${DB_URL:jdbc:h2:mem:testdb}
-    driver-class-name: org.h2.Driver
+    driver-class-name: ${DRIVER_CLASS_NAME:org.h2.Driver}
     username: ${DB_USER:sa}
     password: ${DB_PASSWORD:}
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: ${JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
     hibernate:
       ddl-auto: ${DDL_AUTO:update}
     defer-datasource-initialization: true
+    
   sql:
     init:
       mode: always
@@ -36,6 +37,21 @@ app:
     api-key: ${SENDGRID_API_KEY:}
     from-email: ${SENDGRID_FROM_EMAIL:}
     from-name: ${SENDGRID_FROM_NAME:REDr}
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME:}
+    api-key: ${CLOUDINARY_API_KEY:}
+    api-secret: ${CLOUDINARY_API_SECRET:}
+    folder: ${CLOUDINARY_FOLDER:cars}
   verification:
     base-url: ${VERIFICATION_BASE_URL:http://localhost:8080/verification}
     token-expiry-hours: ${VERIFICATION_TOKEN_EXPIRY_HOURS:24}
+  security:
+    public-paths:
+      - /public/**
+      - /auth/login
+      - /auth/register
+      - /auth/refresh
+      - /actuator/health
+      - /swagger-ui/**
+      - /v3/api-docs/**
+      - /h2-console/**

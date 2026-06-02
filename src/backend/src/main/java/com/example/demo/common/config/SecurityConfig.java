@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/auth/**", "/h2-console/**", "/verification/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/public/agencies/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/public/vehicles/**").permitAll()
                     .requestMatchers("/admin/**").hasRole("SUPER_ADMIN")
                     .requestMatchers(HttpMethod.POST, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
                     .requestMatchers(HttpMethod.PUT, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")

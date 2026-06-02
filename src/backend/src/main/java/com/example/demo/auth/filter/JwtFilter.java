@@ -4,14 +4,18 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.auth.service.JwtService;
+import com.example.demo.common.config.PublicPathsConfig;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,10 +23,15 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
+    @Autowired
+    private PublicPathsConfig publicPathsConfig;
+    private final PathMatcher pathMatcher = new AntPathMatcher();
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
@@ -31,10 +40,13 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+            FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(request);
-
+        if (isPublicPath(request)) {
+            log.debug("Public path detected: {}, skipping JWT validation", request.getRequestURI());
+            filterChain.doFilter(request, response);
+            return;
+        }
         if (token != null) {
             try {
                 String email = jwtService.extractEmail(token);
@@ -50,20 +62,24 @@ public class JwtFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
-                            userDetails.getAuthorities()
-                    );
+                            userDetails.getAuthorities());
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                
+
                 writeUnauthorized(response);
                 return;
             }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublicPath(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return publicPathsConfig.getPublicPaths().stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 
     private String resolveToken(HttpServletRequest request) {
