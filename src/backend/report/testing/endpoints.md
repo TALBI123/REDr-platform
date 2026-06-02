@@ -229,6 +229,221 @@ curl -i -b cookies.txt http://localhost:8080/agencies/AGENCY_ID
 
 ---
 
+## /public/vehicles (GET)
+**Auth**: public
+
+**Query params** (optionnels):
+- brand, mode
+- minYear, maxYear
+- fuelType, transmissionType
+- status, conditionStatus
+- minMileage, maxMileage
+- minDailyPrice, maxDailyPrice
+- promotionActive
+- seatCapacity
+- agencyId, categoryId
+- page, size, sort
+
+**Note**:
+- Si status n'est pas fourni, l'API force Available.
+
+**curl**:
+```bash
+curl -i "http://localhost:8080/public/vehicles?brand=Toyota&minDailyPrice=300&maxDailyPrice=800"
+```
+
+---
+
+## /public/vehicles/{carId} (GET)
+**Auth**: public
+
+**curl**:
+```bash
+curl -i http://localhost:8080/public/vehicles/CAR_ID
+```
+
+---
+
+## /public/vehicles/{carId}/photos (GET)
+**Auth**: public
+
+**curl**:
+```bash
+curl -i http://localhost:8080/public/vehicles/CAR_ID/photos
+```
+
+---
+
+## /admin/vehicles (GET)
+**Auth**: SUPER_ADMIN
+
+**curl**:
+```bash
+curl -i -b cookies.txt http://localhost:8080/admin/vehicles
+```
+
+---
+
+## /admin/vehicles (POST)
+**Auth**: SUPER_ADMIN
+
+**Body** (CarRequestDTO):
+```json
+{
+  "brand": "Toyota",
+  "mode": "Corolla",
+  "year": 2022,
+  "fuelTypes": ["GASOLINE"],
+  "transmissionType": "AUTOMATIC",
+  "mileage": 12000,
+  "dailyPrice": 350.0,
+  "seatCapacity": 5,
+  "description": "Compact car",
+  "agencyId": "AGENCY_ID",
+  "categoryId": "CATEGORY_ID"
+}
+```
+
+**curl**:
+```bash
+curl -i -b cookies.txt \
+  -H "Content-Type: application/json" \
+  -d '{"brand":"Toyota","mode":"Corolla","year":2022,"fuelTypes":["GASOLINE"],"transmissionType":"AUTOMATIC","mileage":12000,"dailyPrice":350.0,"seatCapacity":5,"description":"Compact car","agencyId":"AGENCY_ID","categoryId":"CATEGORY_ID"}' \
+  http://localhost:8080/admin/vehicles
+```
+
+---
+
+## /admin/vehicles/{carId} (GET)
+**Auth**: SUPER_ADMIN
+
+**curl**:
+```bash
+curl -i -b cookies.txt http://localhost:8080/admin/vehicles/CAR_ID
+```
+
+---
+
+## /admin/vehicles/{carId} (PUT)
+**Auth**: SUPER_ADMIN
+
+**Body** (CarUpdateDTO, fields optionnels)
+
+**curl**:
+```bash
+curl -i -b cookies.txt \
+  -H "Content-Type: application/json" \
+  -d '{"dailyPrice":320.0,"promotionActive":true,"promotionRate":10}' \
+  http://localhost:8080/admin/vehicles/CAR_ID
+```
+
+---
+
+## /admin/vehicles/{carId}/status (PATCH)
+**Auth**: SUPER_ADMIN
+
+**Body** (CarStatusUpdateDTO):
+```json
+{
+  "currentStatus": "Maintenance",
+  "conditionStatus": "NEEDS_REPAIR"
+}
+```
+
+---
+
+## /admin/vehicles/{carId} (DELETE)
+**Auth**: SUPER_ADMIN
+
+**curl**:
+```bash
+curl -i -b cookies.txt -X DELETE http://localhost:8080/admin/vehicles/CAR_ID
+```
+
+---
+
+## /agencies/{agencyId}/vehicles (GET)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+**curl**:
+```bash
+curl -i -b cookies.txt http://localhost:8080/agencies/AGENCY_ID/vehicles
+```
+
+---
+
+## /agencies/{agencyId}/vehicles (POST)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+**Body** (CarRequestDTO):
+```json
+{
+  "brand": "Renault",
+  "mode": "Clio",
+  "year": 2021,
+  "fuelTypes": ["DIESEL"],
+  "transmissionType": "MANUAL",
+  "dailyPrice": 250.0,
+  "seatCapacity": 5,
+  "description": "City car",
+  "categoryId": "CATEGORY_ID"
+}
+```
+
+---
+
+## /agencies/{agencyId}/vehicles/{carId} (GET)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+---
+
+## /agencies/{agencyId}/vehicles/{carId} (PUT)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+---
+
+## /agencies/{agencyId}/vehicles/{carId}/status (PATCH)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+---
+
+## /agencies/{agencyId}/vehicles/{carId} (DELETE)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+---
+
+## /agencies/{agencyId}/vehicles/{carId}/photos (POST)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+**Type**: multipart/form-data
+
+**curl**:
+```bash
+curl -i -b cookies.txt \
+  -F "file=@C:/path/to/photo.jpg" \
+  -F "description=front view" \
+  http://localhost:8080/agencies/AGENCY_ID/vehicles/CAR_ID/photos
+```
+
+---
+
+## /agencies/{agencyId}/vehicles/{carId}/photos/{photoId} (PATCH)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+**Body** (PhotoUpdateDTO):
+```json
+{
+  "description": "new angle"
+}
+```
+
+---
+
+## /agencies/{agencyId}/vehicles/{carId}/photos/{photoId} (DELETE)
+**Auth**: SUPER_ADMIN ou AGENCY_MANAGER
+
+---
+
 ## /bookings/my (GET)
 **Auth**: CLIENT ou SUPER_ADMIN
 
