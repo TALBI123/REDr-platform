@@ -576,6 +576,8 @@ curl -i -b cookies.txt \
 curl -i -b cookies.txt http://localhost:8080/test
 ```
 
+
+
 **A tester**:
 - Retourne "Authenticated as: <email>".
 

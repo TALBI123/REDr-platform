@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-    @NotBlank
+    @NotBlank(message = "Email is required")
     @Email
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Password is required")
     @Size(min = 8)
     private String password;
 
@@ -23,11 +23,11 @@ public class RegisterRequest {
     private String lastName;
     private String phone;
 
-    @NotBlank
-    private String licenceNumber;
+    // @NotBlank
+    // private String licenceNumber;
 
-    @NotBlank
-    private String passportNumber;
+    // @NotBlank
+    // private String passportNumber;
 
-    private String location;
+    // private String location;
 }

@@ -43,9 +43,9 @@ public class RegistrationService {
         client.setPhone(request.getPhone());
         client.setRole(UserRole.CLIENT);
         client.setAccountStatus(UserStatus.PENDING);
-        client.setLicenceNumber(request.getLicenceNumber());
-        client.setPassportNumber(request.getPassportNumber());
-        client.setLocation(request.getLocation());
+        // client.setLicenceNumber(request.getLicenceNumber());
+        // client.setPassportNumber(request.getPassportNumber());
+        // client.setLocation(request.getLocation());
         client.setInscriptionDate(LocalDate.now());
         client.setPasswordUpdatedAt(LocalDateTime.now());
 

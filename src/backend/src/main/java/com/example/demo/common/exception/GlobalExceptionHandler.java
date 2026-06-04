@@ -2,6 +2,7 @@ package com.example.demo.common.exception;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.hibernate.LazyInitializationException;
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex,
             HttpServletRequest request) {
         String message = ex.getBindingResult().getFieldErrors().stream()
-                .map(FieldError::getDefaultMessage)
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
 
         return buildError(HttpStatus.BAD_REQUEST, message, request.getRequestURI());
@@ -194,12 +195,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGeneric(
+    public ResponseEntity<?> handleGeneric(
             Exception ex,
             HttpServletRequest request) {
-        log.error("Unhandled exception", ex);
-        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error. Contact support.",
-                request.getRequestURI());
+        log.error("Error on {} {}", request.getMethod(), request.getRequestURI(), ex);
+
+        // Retournez l'exception réelle pour le debug
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "error", ex.getClass().getSimpleName(),
+                        "message", ex.getMessage(),
+                        "path", request.getRequestURI()));
     }
 
     private ResponseEntity<ApiError> buildError(HttpStatus status, String message, String path) {
