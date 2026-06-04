@@ -1,5 +1,6 @@
 package com.example.demo.user.controller;
 
+import com.example.demo.user.dto.CurrentUserRoleDTO;
 import com.example.demo.user.dto.UserProfileDTO;
 import com.example.demo.user.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserProfileController {
 
 	private final ProfileService profileService;
+
+	@GetMapping("/me")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<CurrentUserRoleDTO> getCurrentUserRole() {
+		return ResponseEntity.ok(profileService.getCurrentUserRole());
+	}
 
 	@GetMapping("/user")
 	@PreAuthorize("hasRole('CLIENT')")

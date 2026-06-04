@@ -1,11 +1,13 @@
 package com.example.demo.user.service;
 
+import com.example.demo.auth.principal.CustomUserDetails;
 import com.example.demo.common.exception.ResourceNotFoundException;
 import com.example.demo.common.security.SecurityUtils;
 import com.example.demo.models.user.Admin;
 import com.example.demo.models.user.AgencyManager;
 import com.example.demo.models.user.AppUser;
 import com.example.demo.models.user.Client;
+import com.example.demo.user.dto.CurrentUserRoleDTO;
 import com.example.demo.user.dto.UserProfileDTO;
 import com.example.demo.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +45,15 @@ public class ProfileService {
 			throw new AccessDeniedException("Only agency managers can access this profile endpoint");
 		}
 		return toDto(user);
+	}
+
+	public CurrentUserRoleDTO getCurrentUserRole() {
+		CustomUserDetails principal = securityUtils.getCurrentPrincipal();
+		return new CurrentUserRoleDTO(
+				principal.getUserId(),
+				principal.getUsername(),
+				principal.getRole(),
+				principal.getAgencyId());
 	}
 
 	private AppUser getCurrentUser() {
