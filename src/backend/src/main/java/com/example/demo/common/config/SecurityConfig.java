@@ -1,6 +1,7 @@
 package com.example.demo.common.config;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,10 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 
 import com.example.demo.auth.filter.JwtFilter;
 
@@ -37,23 +42,43 @@ public class SecurityConfig {
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/**", "/h2-console/**", "/verification/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/public/agencies/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/public/vehicles/**").permitAll()
-                    .requestMatchers("/admin/**").hasRole("SUPER_ADMIN")
-                    .requestMatchers(HttpMethod.POST, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
-                    .requestMatchers(HttpMethod.PUT, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
-                    .requestMatchers(HttpMethod.PATCH, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
-                    .requestMatchers(HttpMethod.DELETE, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
-                    .requestMatchers("/agencies/*/vehicles/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
-                    .requestMatchers("/agencies/*/bookings/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
-                    .requestMatchers("/bookings/my/**").hasAnyRole("CLIENT", "SUPER_ADMIN")
-                    .requestMatchers(HttpMethod.GET, "/agencies/**").authenticated()
-                    .requestMatchers(HttpMethod.GET, "/vehicles/**").authenticated()
-                    .anyRequest().authenticated())
+                        .requestMatchers("/auth/**", "/h2-console/**", "/verification/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/public/agencies/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/public/vehicles/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
+                        .requestMatchers(HttpMethod.PATCH, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
+                        .requestMatchers("/agencies/*/vehicles/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
+                        .requestMatchers("/agencies/*/bookings/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
+                        .requestMatchers("/bookings/my/**").hasAnyRole("CLIENT", "SUPER_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/agencies/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/vehicles/**").authenticated()
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "http://localhost:5500",
+                "http://127.0.0.1:5500",
+                "http://localhost:3000",
+                "http://localhost:5173"
+            ));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie", "ACCESS_TOKEN"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
@@ -63,12 +88,14 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
-        return (request, response, authException) -> writeJsonError(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        return (request, response, authException) -> writeJsonError(response, HttpServletResponse.SC_UNAUTHORIZED,
+                "Unauthorized");
     }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, accessDeniedException) -> writeJsonError(response, HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+        return (request, response, accessDeniedException) -> writeJsonError(response, HttpServletResponse.SC_FORBIDDEN,
+                "Forbidden");
     }
 
     private void writeJsonError(HttpServletResponse response, int status, String message) throws IOException {
