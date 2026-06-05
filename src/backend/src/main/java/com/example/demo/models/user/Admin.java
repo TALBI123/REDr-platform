@@ -20,5 +20,5 @@ public class Admin extends AppUser {
     private String permissions;
 
     @Column(name = "admin_level")
-    private int adminLevel;
+    private Integer adminLevel;
 }
