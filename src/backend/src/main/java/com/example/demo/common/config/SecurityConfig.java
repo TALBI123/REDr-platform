@@ -43,8 +43,8 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/h2-console/**", "/verification/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/public/agencies/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/public/vehicles/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/agencies/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vehicles/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("SUPER_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/agencies/**").hasAnyRole("SUPER_ADMIN", "AGENCY_MANAGER")
