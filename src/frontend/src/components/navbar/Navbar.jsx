@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 
 function IconSearch() {
   return (
@@ -27,7 +29,10 @@ function IconHelp() {
 function Navbar() {
   const [open, setOpen] = useState(false)
   const [hidden, setHidden] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
   const lastScrollY = useRef(0)
+  const { isAuthenticated, user, logout } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,6 +62,20 @@ function Navbar() {
     }
   }, [open])
 
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setOpen(false)
+      navigate('/')
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
+
+  const handleProfileClick = async () => {
+    setProfileOpen((current) => !current)
+  }
+
   return (
     <>
       <header
@@ -81,7 +100,7 @@ function Navbar() {
           </button>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80">
           <div className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#8DCF30]">
             Red<span className="text-[#7230CF]">r</span>
             <span className="text-sm align-top -translate-y-1">®</span>
@@ -89,34 +108,55 @@ function Navbar() {
           <span className="hidden sm:inline-flex items-center rounded-full bg-[#8DCF30] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-black">
             Premium Fleet
           </span>
-        </div>
+        </Link>
 
         <div className="hidden lg:flex items-center gap-8 text-sm uppercase tracking-[0.2em]">
-          <a href="#fleet" className="text-black font-semibold hover:text-[#7230CF]">Fleet</a>
-          <a href="#locations" className="text-black font-semibold hover:text-[#7230CF]">Locations</a>
-          <a href="#deals" className="text-black font-semibold hover:text-[#7230CF]">Deals</a>
-          <a href="#support" className="text-black font-semibold hover:text-[#7230CF]">Support</a>
+          <Link to="/cars" className="text-black font-semibold hover:text-[#6C27D3]">Fleet</Link>
+          <Link to="/locations" className="text-black font-semibold hover:text-[#6C27D3]">Locations</Link>
+          <Link to="/deals" className="text-black font-semibold hover:text-[#6C27D3]">Deals</Link>
+          <Link to="/support" className="text-black font-semibold hover:text-[#6C27D3]">Support</Link>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button className="hidden sm:inline-flex items-center justify-center w-10 h-10 rounded-full text-black hover:bg-black/5" type="button" aria-label="Account">
-            <IconUser />
-          </button>
+        <div className="relative flex items-center gap-2">
           <button className="hidden sm:inline-flex items-center justify-center w-10 h-10 rounded-full text-black hover:bg-black/5" type="button" aria-label="Help">
             <IconHelp />
           </button>
-          <button
-            className="sm:hidden inline-flex items-center justify-center h-9 px-3 rounded-full bg-[#8DCF30] text-black text-[11px] font-bold uppercase tracking-[0.2em]"
-            type="button"
-          >
-            Book
-          </button>
-          <button
-            className="hidden sm:inline-flex items-center justify-center h-11 px-5 rounded-full bg-[#8DCF30] text-black text-sm font-bold uppercase tracking-[0.22em] hover:bg-[#7230CF] hover:text-white transition-colors"
-            type="button"
-          >
-            Book Now
-          </button>
+          {isAuthenticated ? (
+            <button
+              type="button"
+              onClick={handleProfileClick}
+              className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[#8DCF30] text-black hover:bg-[#6C27D3] hover:text-white transition-colors"
+              aria-label="Account"
+            >
+              <IconUser />
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="inline-flex items-center justify-center h-11 px-5 rounded-full bg-[#8DCF30] text-black text-sm font-bold uppercase tracking-[0.22em] hover:bg-[#6C27D3] hover:text-white transition-colors"
+            >
+              Login
+            </Link>
+          )}
+
+          {isAuthenticated && profileOpen && (
+            <div className="absolute right-0 top-14 z-[120] w-56 rounded-2xl border border-black/10 bg-white p-2 text-black shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
+              <Link
+                to="/profile"
+                onClick={() => setProfileOpen(false)}
+                className="block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-black/5"
+              >
+                Mon profil
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="block w-full rounded-xl px-4 py-3 text-left text-sm font-semibold text-red-600 hover:bg-red-50"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -128,9 +168,9 @@ function Navbar() {
       >
         <div className="min-h-full w-full px-6 py-8 sm:px-12 sm:py-12">
           <div className="flex items-center justify-between">
-            <div className="text-2xl font-extrabold tracking-tight">
+            <Link to="/" onClick={() => setOpen(false)} className="text-2xl font-extrabold tracking-tight">
               Rent<span className="text-[#8DCF30]">car</span>®
-            </div>
+            </Link>
             <button
               className="inline-flex items-center justify-center w-11 h-11 rounded-full border border-white/20 hover:bg-white/10"
               type="button"
@@ -147,44 +187,50 @@ function Navbar() {
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-white/60">Explore</p>
               <div className="mt-6 grid gap-4 text-3xl sm:text-4xl font-semibold">
-                <a href="#fleet" onClick={() => setOpen(false)} className="hover:text-white/80">Fleet</a>
-                <a href="#locations" onClick={() => setOpen(false)} className="hover:text-white/80">Locations</a>
-                <a href="#deals" onClick={() => setOpen(false)} className="hover:text-white/80">Deals</a>
-                <a href="#support" onClick={() => setOpen(false)} className="hover:text-white/80">Support</a>
+                <Link to="/cars" onClick={() => setOpen(false)} className="hover:text-white/80">Fleet</Link>                <Link to="/agencies" onClick={() => setOpen(false)} className="hover:text-white/80">Agences</Link>                <Link to="/locations" onClick={() => setOpen(false)} className="hover:text-white/80">Locations</Link>
+                <Link to="/deals" onClick={() => setOpen(false)} className="hover:text-white/80">Deals</Link>
+                <Link to="/support" onClick={() => setOpen(false)} className="hover:text-white/80">Support</Link>
               </div>
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">Quick Booking</p>
-              <p className="mt-3 text-lg font-semibold text-white">Reserve your car in 60 seconds.</p>
-              <button
-                className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[#8DCF30] py-3 text-sm font-bold uppercase tracking-[0.22em] text-black hover:bg-white"
-                type="button"
-                onClick={() => setOpen(false)}
-              >
-                Book Now
-              </button>
-              <button
-                className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-white/30 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white hover:border-[#7230CF]"
-                type="button"
-                onClick={() => setOpen(false)}
-              >
-                See Deals
-              </button>
-              <div className="mt-6 grid grid-cols-2 gap-3 text-xs uppercase tracking-[0.2em]">
-                <button
-                  className="inline-flex items-center justify-center rounded-full border border-white/20 py-2 text-white/90 hover:border-[#8DCF30]"
-                  type="button"
-                  onClick={() => setOpen(false)}
-                >
-                  Account
-                </button>
-                <button
-                  className="inline-flex items-center justify-center rounded-full border border-white/20 py-2 text-white/90 hover:border-[#8DCF30]"
-                  type="button"
-                  onClick={() => setOpen(false)}
-                >
-                  Help
-                </button>
+              <p className="text-xs uppercase tracking-[0.3em] text-white/60">Account</p>
+              <div className="mt-6 space-y-3">
+                {isAuthenticated ? (
+                  <>
+                    <p className="text-lg font-semibold text-white">{user?.email}</p>
+                    <Link
+                      to={user?.role === 'CLIENT' ? '/dashboard/client' : user?.role === 'AGENCY_MANAGER' ? '/dashboard/agency' : '/dashboard/admin'}
+                      className="block w-full text-center rounded-full bg-[#6C27D3] py-3 text-sm font-bold uppercase tracking-[0.22em] text-white hover:bg-[#5a1fa8]"
+                      onClick={() => setOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-center rounded-full border border-white/30 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white hover:border-red-500 hover:text-red-400"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-lg font-semibold text-white">Connect to your account</p>
+                    <Link
+                      to="/login"
+                      className="block w-full text-center rounded-full bg-[#6C27D3] py-3 text-sm font-bold uppercase tracking-[0.22em] text-white hover:bg-[#5a1fa8]"
+                      onClick={() => setOpen(false)}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/register/client"
+                      className="block w-full text-center rounded-full border border-white/30 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white hover:border-[#6C27D3]"
+                      onClick={() => setOpen(false)}
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

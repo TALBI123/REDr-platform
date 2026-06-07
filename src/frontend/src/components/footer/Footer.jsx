@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function Footer() {
 	return (
 		<footer className="mt-16 rounded-t-[24px] bg-black text-white sm:mx-4">
@@ -6,20 +8,20 @@ function Footer() {
 					<div className="space-y-4">
 						<h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Fleet</h3>
 						<ul className="space-y-2 text-sm text-white/70">
+							<li><Link className="hover:text-[#8DCF30]" to="/cars">All Vehicles</Link></li>
 							<li><a className="hover:text-[#8DCF30]" href="#fleet">SUV</a></li>
 							<li><a className="hover:text-[#8DCF30]" href="#fleet">Sedan</a></li>
 							<li><a className="hover:text-[#8DCF30]" href="#fleet">Electric</a></li>
-							<li><a className="hover:text-[#8DCF30]" href="#fleet">Luxury</a></li>
 						</ul>
 					</div>
 
 					<div className="space-y-4">
-						<h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Locations</h3>
+						<h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Agences</h3>
 						<ul className="space-y-2 text-sm text-white/70">
-							<li><a className="hover:text-[#8DCF30]" href="#locations">Airport</a></li>
-							<li><a className="hover:text-[#8DCF30]" href="#locations">City Center</a></li>
-							<li><a className="hover:text-[#8DCF30]" href="#locations">Business District</a></li>
-							<li><a className="hover:text-[#8DCF30]" href="#locations">All Locations</a></li>
+							<li><Link className="hover:text-[#8DCF30]" to="/agencies">All Agencies</Link></li>
+							<li><a className="hover:text-[#8DCF30]" href="#agencies">Find Near You</a></li>
+							<li><a className="hover:text-[#8DCF30]" href="#agencies">Partner With Us</a></li>
+							<li><a className="hover:text-[#8DCF30]" href="#agencies">Locations</a></li>
 						</ul>
 					</div>
 
@@ -37,15 +39,14 @@ function Footer() {
 						<h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Company</h3>
 						<ul className="space-y-2 text-sm text-white/70">
 							<li><a className="hover:text-[#8DCF30]" href="#about">About</a></li>
-							<li><a className="hover:text-[#8DCF30]" href="#deals">Deals</a></li>
+							<li><Link className="hover:text-[#8DCF30]" to="/deals">Deals</Link></li>
 							<li><a className="hover:text-[#8DCF30]" href="#stories">Stories</a></li>
 							<li><a className="hover:text-[#8DCF30]" href="#careers">Careers</a></li>
 						</ul>
 					</div>
 					<div className="space-y-4">
-						<div className="text-2xl font-extrabold tracking-tight text-[#8DCF30]">
-							Red<span className="text-[#7230CF]">r</span>
-							<span className="text-sm align-top -translate-y-1">®</span>
+						<div className="text-2xl font-extrabold tracking-tight">
+							Rent<span className="text-[#8DCF30]">car</span><span className="text-sm align-top -translate-y-1">®</span>
 						</div>
 						<p className="text-sm text-white/60">
 							Premium car rental for business and leisure. Book in seconds.
