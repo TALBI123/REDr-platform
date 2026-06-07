@@ -1,38 +1,37 @@
+import { useEffect, useState } from 'react'
 import MainLayout from '../../layouts/main/MainLayout'
 import CarCard from '../../components/card/CarCard'
 import heroImage from '../../data/img1_rentcar.jpg'
+import { vehicleService } from '../../services/vehicleService'
 
-const cars = [
-	{
-		id: 1,
-		name: 'Mercedes C-Class',
-		category: 'Sedan',
-		pricePerDay: 120,
-		seats: 5,
-		transmission: 'Auto',
-		image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
-	},
-	{
-		id: 2,
-		name: 'Range Rover Evoque',
-		category: 'SUV',
-		pricePerDay: 160,
-		seats: 5,
-		transmission: 'Auto',
-		image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
-	},
-	{
-		id: 3,
-		name: 'Tesla Model 3',
-		category: 'Electric',
-		pricePerDay: 140,
-		seats: 5,
-		transmission: 'Auto',
-		image: 'https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop',
-	},
-]
+const extractCars = (response) => {
+	const data = response?.data ?? response
+
+	if (Array.isArray(data)) return data
+	if (Array.isArray(data?.content)) return data.content
+	if (Array.isArray(data?.data)) return data.data
+	if (Array.isArray(data?.vehicles)) return data.vehicles
+
+	return []
+}
 
 function PageHome() {
+	const [cars, setCars] = useState([])
+
+	useEffect(() => {
+		const fetchCars = async () => {
+			try {
+				const response = await vehicleService.getPublicVehicles({ page: 0, size: 3 })
+				setCars(extractCars(response))
+			} catch (error) {
+				console.error('Erreur lors du chargement des vehicules:', error)
+				setCars([])
+			}
+		}
+
+		fetchCars()
+	}, [])
+
 	return (
 		<MainLayout>
             <div className="border-x-gray-600 mb-16">
@@ -110,11 +109,13 @@ function PageHome() {
 					</button>
 				</div>
 
-				<div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-					{cars.map((car) => (
-						<CarCard key={car.id} car={car} />
-					))}
-				</div>
+				{cars.length > 0 && (
+					<div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+						{cars.map((car) => (
+							<CarCard key={car.id} car={car} />
+						))}
+					</div>
+				)}
 			</section>
 		</MainLayout>
 	)
